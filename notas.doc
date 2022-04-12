@@ -1,0 +1,150 @@
+Angular: framework para construir aplicações em HTML, CSS, JavaScript/TypeScript.
+Frameworks foram criadas para facilitar o desenvolvimento de aplicações web, já que utilizar JavaScript direto vai se tornando complexo e é difícil de testar.
+Nessa estrutura, teremos:
+    Front-end: abrange o que usuário vê e interage (user interface) - utilizaremos HMTL, CSS, TypeScript e Angular;
+    Back-end: abrange os servidores que armazenam os dados e realizam o processamento - utilizaremos bases de dados, serviços HTTP ou APIs.
+Endpoints são acessados por meio de protocolo HTTP - fazemos requests para acessar ou salvar dados.
+
+ENVIRONMENT
+
+A programação ocorre dentro do Angular workspace. Necessário criar um workspace atrás do comando: ng new
+Setar pasta: cd endereço
+Carregar a aplicação em um servidor web: ng serve
+
+Pasta node_modules: bibliotecas que são compiladas quando a app é implantada (deploy/subir para um servidor).
+Pasta src: onde encontra-se o código de fato (origem).
+    Pasta app: module e component.
+    Pastas assets: armazenar elementos estáticos.
+    Environments: armazena configurações dos environments.
+    Index.html: contém a aplicação, mas as referências são inseridas de forma dinâmica nessa página.
+    Main.ts: ponto de partida em que o Angular carrega o module.
+    Styles.css: estilos globais da aplicação - cada página ou componente pode ser seu style.
+    Package.json: bibliotecas necessárias.
+    Tsconfig.json: configurações do compilador que transforma TypeScript para JavaScript de forma que os navegadores consigam ler.
+
+TYPESCRIPT
+
+TypeScript suporta tudo do JavaScript, e contém aspectos a mais.
+Transpile: compilador traduz TypeScript para JavaScript, que é entendido pelos navegadores.
+
+let = declarar variável
+    count = número
+    string
+    number
+const = constante
+console.log('') = exibe uma mensagem
+function = função
+enum variavel = ordenar numericamente
+
+Asserções
+Asserção consiste em declarar explicitamente qual é o tipo da variável. Maneiras:
+    Com <>: (<a>variavel);
+    Com as: (variavel as a)
+Não altera o dado da variável na memória.
+
+Arrow functions
+Para escrever uma função, não é necessário usar a keyword function, basta colocar o parâmetro e a flecha (arrow function)
+Ex.:
+    let log = (message) => {
+        console.log(message);
+    }
+
+    // 1) declara variável log que recebe a função message;
+    // 2) o bloco de código entre {} indica o que fazer que a variável.
+    // 3) console.log exibe a função message.
+
+Custom types
+Interface
+Ao invés de escrever parâmetro por parâmetro dentro de uma função, é preferível reuní-los dentro de um objeto (definido anteriormente), e indicar somente o objeto na função.
+Em casos simples, usamos inline annotation para indicar o custom type ou o custom object.
+    Ex.: (point: {x: number; y: number})
+Usando interface, podemos declarar objetos (com seus parâmetros e tipos) fora da função, de forma a servir para mais de uma função.
+    Ex.:
+        interface Point {
+            x: number,
+            y: number
+        }
+        let drawPoint = (point: Point) => {
+            ...
+        }
+
+Cohesion
+Em programação orientada a objetos, há o conceito de coesão: coisas relacionadas devem fazer parte de uma mesma unidade. No exemplo anterior, a função let está a parte, embora esteja relacionada a interface.
+A unidade deve ser a chamada classe.
+Como interface serve só para declaração, não para implementação, usaremos classes.
+
+Classes
+Class: agrupa propriedades e funções que são altamente relacionadas.
+Ex.:
+    class Point {
+        x: number;
+        y: number;
+
+        draw() {
+            ...
+        }
+
+        getDistance() {
+            ...
+        }
+    }
+
+    // 1) x e y são atributos, utilizados para armazenar dados.
+    // 2) draw é uma função, onde realmente ocorre implementação - faz parte dos métodos.
+
+This
+O "this" funciona de forma parecida com os pronomes na língua portuguesa. Quando falamos "João está correndo porque ele quer pegar o ônibus", usamos "ele" para referir-mo-nos ao João. Nessa analogia, this funciona tanto para se referir ao objeto (assim como "ele" se refere a João) quanto para armazenar o valor do objeto.
+This é interessante para garantir precisão: vai se referir ao objeto citado anteriormente, ao qual a função está associada.
+Ex.:
+    var person = {
+        firstName: "Penelope",
+        lastName: "Barrymore",
+        fullName: function () {
+            console.log(this.firstName + " " + this.lastName);
+        }
+    }
+Uma função contendo um objeto vai ter as propriedades do objeto invocado. Precisamos do this para acessar os métodos e propriedades do objeto.
+
+Objects
+Para que o objeto tenha um valor, temos que declará-lo usando let de forma que uma espaço de memória seja reservado a ele(definir a classe não atribui valor automaticamente).
+Ex.:
+    class Point {
+        x: number;
+        y: number;
+
+        draw() {
+            console.log('X: ' + this.x + ', Y: ' + this.y);
+        }
+    }
+
+    let point = new Point();
+    point.draw();
+
+    // 1) Escrito dessa maneira, let declara o objeto point que receberá um valor, e o compilador infere que o objeto point pertence à classe Point.
+    // 2) Por padrão, x e y estarão como undefinied. Vamos atribuir valores a eles.
+
+    let point = new Point();
+    point.x=1;
+    point.y=2;
+    point.draw();
+
+Constructors
+Constructor é um método de classe, contendo parâmetros, atributos (variáveis) declaradas diretamente no método, e inicializamos as variáveis usando this.x = x
+É necessário fornecer os valores de x e y, no entanto, se não soubermos os valores iniciais dos atributos ou não quisermos atribuir, fazemos deles opcionais adicionando "?".
+Ex.:
+    class Point {
+        x: number;
+        y: number;
+
+        constructor(x?: number; y?: number){
+            this.x=x;
+            this.y=y;
+
+        }
+        draw() {
+            console.log('X: ' + this.x + ', Y: ' + this.y);
+        }
+    }
+
+    let point = new Point();
+    point.draw();
