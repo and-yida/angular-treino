@@ -1,3 +1,5 @@
+INTRODUÇÃO
+
 Angular: framework para construir aplicações em HTML, CSS, JavaScript/TypeScript.
 Frameworks foram criadas para facilitar o desenvolvimento de aplicações web, já que utilizar JavaScript direto vai se tornando complexo e é difícil de testar.
 Nessa estrutura, teremos:
@@ -7,7 +9,7 @@ Endpoints são acessados por meio de protocolo HTTP - fazemos requests para aces
 
 ENVIRONMENT
 
-A programação ocorre dentro do Angular workspace. Necessário criar um workspace atrás do comando: ng new
+A programação ocorre dentro do Angular workspace. Necessário criar um workspace através do comando: ng new
 Setar pasta: cd endereço
 Carregar a aplicação em um servidor web: ng serve
 
@@ -21,6 +23,9 @@ Pasta src: onde encontra-se o código de fato (origem).
     Styles.css: estilos globais da aplicação - cada página ou componente pode ser seu style.
     Package.json: bibliotecas necessárias.
     Tsconfig.json: configurações do compilador que transforma TypeScript para JavaScript de forma que os navegadores consigam ler.
+
+___________________________________
+
 
 TYPESCRIPT
 
@@ -148,3 +153,192 @@ Ex.:
 
     let point = new Point();
     point.draw();
+
+Access modifiers
+Para controlar o acesso a atributos de uma classe, temos três modificadores: public, private e protected.
+Declarando private x: number, isso garante que o valor de x não será modificado em outra parte do código.
+
+Se prefixarmos um constructor com um acess modifier (private ou public), o compilador vai gerar atributos com aquele nome e vai inicializá-los.
+Ex.:
+    //inicialmente tínhamos isso
+    class Point {
+        x: number;
+        y: number;
+
+        constructor(x?: number; y?: number){
+            this.x=x;
+            this.y=y;
+
+        }
+
+    //podemos resumir em
+    class Point {
+        constructor(private x: number, private y: number) {
+        }
+    }
+
+Acessar as propriedades dos atributos
+Não conseguimos exibir o valor dos atributos diretamente fora da classe. Precisamos criar a função getX.
+Ex.:
+    getX() {
+        return this.x;
+    }
+
+    let x = point.getX();
+    point.draw();
+
+Propriedade
+Se quisermos alterar manualmente o valor do atributo, podemos usar propriedade ao invés de método. Ao invés de getX, declaramos get X, sendo X uma propriedade. Para indicar X, usamos point.X
+Ex.:
+    get X() {
+        return this.x;
+    }
+
+    set X(value) {
+        if (value<0) {
+            throw new Error('value cannot be less than 0.');
+
+            this.x = value;
+        }
+    }
+
+    let x = point.X();
+    point.X=10;
+    point.draw();
+
+    //nesse exemplo usamos uma validação para X - o valor tem que ser maior que 0
+
+Module
+Utilizar arquivos como modules implica em podermos acessar esses arquivos através de import no código.
+Ex.: criamos o arquivo point.ts que está criando a classe Point.
+Ex.:
+    import { Point } from './point'
+
+    //a origem está indicando que o arquivo está no mesmo diretório
+
+    //no arquivo point adicionamos export
+    export class Point {
+        //...
+    }
+Em Angular, os modules são um pouco diferentes. Eles não são indicados por um diretório, mas ficam dentro da pasta node_modules. Para importar usamos o nome da biblioteca. 
+
+___________________________________
+
+ANGULAR
+
+Component
+No núcleo de todo app em Angular existem os componentes.
+Componente engloba Dados, HTML template e Lógica.
+Podemos ver um site como tendo uma view ou um componente, mas também podemos fragmentar isso em vários componentes. Ex.: navbar, sidebar, app ou route component.
+Angular é uma arquitetura baseada em componentes que nos permite trabalhar com partes menores e mais sustentáveis, que podem ser reutilizáveis. 
+Module é o depósito de um grupo de componentes relacionados.
+
+Criando componente
+Na pasta src/app criamos um arquivo component.ts . Criamos uma classe Component e incluímos o export. Para transformar isso em um componente, devemos adicionar metadata através de um decorator. Os decorators oferecem a possibilidade de adicionar metadados e comportamentos a declaração de classes, métodos e propriedades.
+Importamos o decorator que cria componente através da biblioteca: import { Component } from '@angular/core'
+Para atrelar esse componente à classe: @Component({})
+Dentro de {} passamos os parâmetros para dizer ao Angular como esse componente se comporta. Usamos selector e indicamos como 'element'. Depois, adicionamos template (podemos ter um arquivo só para template, mas para fins didáticos colocamos aqui somente um título).
+Ex.:
+    import { Component } from '@angular/core';
+
+    @Component( {
+    selector: 'courses',
+    template: '<h2>Courses</h2>'
+    } )
+
+    export class CoursesComponent {
+}
+
+Depois registramos esse componente em um module. Inicialmente, temos somente o app module (src/app/app.module.ts). O decorator que transforma a classe em module é @NgModule.
+Em declarations, por padrão existe um componente, o AppComponent. Aqui adicionamos o componente que criamos, que será importado.
+Ex.:
+    @NgModule({
+        declarations: [
+        AppComponent,
+        CoursesComponent
+    ],
+
+Voltando ao componente que criamos, em todo lugar no código em que houver o elemento de mesmo nome (do componente), o Angular irá renderizar o template que o acompanha.
+Em app.component.html temos o template externo para o app component, renderizando a homepage. Se apagarmos e colocarmos o elemento que criamos <...><.../>, o template atrelado a ele será renderizado. Esse conteúdo que acompanha o elemento chama-se ng-content
+Ex.:
+    <h1>Angular</h1>
+    <courses></courses>
+    
+    // sempre que o elemento <courses> aparecer, o template do CoursesComponent será renderizado.
+
+Nesse html aparece também o elemento app-root, podemos encontrar seu conteúdo em index.html (template básico do app), e ele está declarado pelo selector: component, para o componente AppComponent (padrão) em app.component.ts
+    app-root é o nome do elemento, quando chamado renderiza o template; está atrelado ao componente AppComponent.
+
+Criando componentes usando Angular CLI
+Podemos criar um componente rapidamente usando, no terminal, o comando: ng g c nomedocomponente
+    (generate component)
+É criada uma pasta com os arquivos, e o arquivo app.module é atualizado com o novo componente.
+
+Templates
+Usamos {{}} para renderizar algo dinamicamente. Isso quer dizer que a expressão usada aí é avaliada em tempo de execução, e o valor dessa expressão vai ser colocada no dom. Se o valor por modificado no futuro, o Angular vai atualizar automaticamente o dom (data binding).
+Ex.:
+    @Component( {
+    selector: 'courses',
+    template: '<h2>{{ title }}</h2>'
+    } )
+    export class CoursesComponent {
+    title = "List of courses";
+    }
+Usar ` para mais de uma linha.
+
+Text interpolation
+A interpolação de uma string permite incorporar uma string dinâmica, isto é, que muda dinamicamente o que é exibido, de acordo com o valor do elemento passado.
+É feito através de {{}}
+
+Directive
+Usamos directive para manipular o dom (adicionar um elemento, remover, modificar a classe, etc.)
+ngFor="" : loop de variáveis
+* é usado como prefixo de um directive.
+Ex.:
+    @Component( {
+    selector: 'courses',
+    template: `
+        <h2>{{ title }}</h2>
+        <ul>
+            <li *ngFor="let course of courses">
+                {{ course }} </li>
+        </ul>
+    `
+
+        // nomeamos uma variável course, e courses é um atributo da classe que estamos iterando continuamente
+        //o atributo courses vai ser iterado continuamente, e em cada iteração a variável course vai adquirir o valor de um course por vez
+        // {{ course }} é interpolação de string; vai exibir dinamicamente valor da variável aqui
+} )
+
+export class CoursesComponent {
+    title = "List of courses";
+    courses = ["course1", "course2", "course3"];
+
+}
+
+Services
+Geralmente adquirimos os valores das variáveis a partir de um server, chamando um HTTP endpoint. A lógica desse comando é implementada através do uso de services.
+Criamos um arquivo separado onde definimos uma classe para service. Dessa forma, poderemos reaproveitar a lógica por trás dessa classe e manter esse tipo de conteúdo separado da parte da interface (componentes).
+Ex.:
+    export class CoursesService {
+    getCourses() {
+        return ["course1", "course2", "course3"]
+    }
+}
+Colocamos export no arquivo do service, e import no component.
+Utilizamos constructor pois é aí que inicializamos um objeto. Passamos como parâmetro uma variável para receber a função definida no service. O Angular cria uma instância desse service e depois passa isso para o constructor.
+
+Ex.:
+    export class CoursesComponent {
+    title = "List of courses";
+    courses;
+
+    constructor (service: CoursesService) {
+        this.courses = service.getCourses();
+    }
+
+
+
+
+
+
