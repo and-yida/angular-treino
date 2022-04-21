@@ -7,9 +7,9 @@ Nessa estrutura, teremos:
     Back-end: abrange os servidores que armazenam os dados e realizam o processamento - utilizaremos bases de dados, serviços HTTP ou APIs.
 Endpoints são acessados por meio de protocolo HTTP - fazemos requests para acessar ou salvar dados.
 
-ENVIRONMENT
+Environment
 
-A programação ocorre dentro do Angular workspace. Necessário criar um workspace através do comando: ng new
+A programação ocorre dentro do Angular workspace. Necessário criar um workspace através do comando: ng new nomedoprojeto
 Setar pasta: cd endereço
 Carregar a aplicação em um servidor web: ng serve
 
@@ -224,6 +224,7 @@ Em Angular, os modules são um pouco diferentes. Eles não são indicados por um
 
 ___________________________________
 
+
 ANGULAR
 
 Component
@@ -326,7 +327,7 @@ Ex.:
     }
 }
 Colocamos export no arquivo do service, e import no component.
-Utilizamos constructor pois é aí que inicializamos um objeto. Passamos como parâmetro uma variável para receber a função definida no service. O Angular cria uma instância desse service e depois passa isso para o constructor.
+Utilizamos constructor pois é aí que inicializamos um objeto. Passamos como parâmetro uma variável para receber a função definida no service. O Angular cria uma instância desse service observando se o constructor tem alguma dependência. No nosso caso existe - service depende da classe CoursesService.
 
 Ex.:
     export class CoursesComponent {
@@ -337,7 +338,19 @@ Ex.:
         this.courses = service.getCourses();
     }
 
+Injeção de dependência
+Quando a classe A usa alguma funcionalidade da classe B, diz-se que a classe A tem uma dependência da classe B.
+Antes de podermos usar métodos de outras classes, primeiro precisamos criar o objeto daquela classe (ou seja, a classe A precisa criar uma instância da classe B). Se por ventura houver futuras alterações na classe B, não haverá problemas para a classe A pois os objetos são criados em tempo de execução.
+Desse modo, transferir a tarefa de criação do objeto a outra entidade e usar diretamente a dependência é chamado de injeção de dependência.
+No nosso código, ainda é necessário registrar a dependência no module. Em app.module.ts temos os providers, um array para registrar todas as dependências que componentes desse module estão contando com.
+Ex.:
+    providers: [
+        CoursesService
+    ]
 
+Criando services usando Angular CLI
+No terminal, podemos criar um service usando: ng g s nomedoservice
+No arquivo criado do service, há um decorator chamado injectable, que será utilizado se houver dependências dessa classe no constructor - isto é, indica que a classe é uma classe injetável.
 
 
 
