@@ -3,7 +3,7 @@
 ## Instruções
 * Criar uma página com um heading que inclui o número de autores.
 * Abaixo, deve constar uma lista de autores usando `ul` e `li`.
-* Usar Angular CLI para criar um componente e um service, e criar todo o código necessário para gerar uma interface como a da imagem.
+* Usar Angular CLI para criar um component e um service, e criar todo o código necessário para gerar uma interface como a da imagem.
 
 ![Image](/exercicio/exercicio.jpg)
 
